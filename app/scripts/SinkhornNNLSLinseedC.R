@@ -930,7 +930,7 @@ SinkhornNNLSLinseed <- R6Class(
         R_limit_Omega <- norm(self$new_samples_points[names(self$zero_distance_samples[limit_num_Omega]),-1],"2")
       }
       
-      step_errors_statistics <- matrix(0,nrow=iterations,ncol=10)
+      step_errors_statistics <- matrix(0,nrow=iterations,ncol=9)
       step_points_statistics_X <- matrix(0,nrow=iterations,ncol=self$cell_types^2)
       step_points_statistics_Omega <- matrix(0,nrow=iterations,ncol=self$cell_types^2)
       
@@ -947,22 +947,20 @@ SinkhornNNLSLinseed <- R6Class(
       self$blocks_statistics <- rbind(self$blocks_statistics,
                                       c(block_name, from_idx, from_idx+iterations-1,
                                         coef_der_X, coef_der_Omega, coef_hinge_H,
-                                        coef_hinge_W, coef_pos_D_h, coef_pos_D_w,
-                                        iterations,limit_X,limit_Omega,cosine_thresh))
+                                        coef_hinge_W, iterations,limit_X,limit_Omega,cosine_thresh))
       
       colnames(self$blocks_statistics) <- c("block_name",
                                             "from", "to",
                                             "coef_der_X", "coef_der_Omega", 
                                             "coef_hinge_H", "coef_hinge_W", 
-                                            "coef_pos_D_h", "coef_pos_D_w",
                                             "iterations", "limit_X", "limit_Omega",
                                             "cosine_thresh")
       
-      res_ <- derivative_stage2(self$X, self$Omega, self$D_w,
+      res_ <- derivative_stage(self$X, self$Omega,
                                self$V_row, self$R, self$S,
                                coef_der_X, coef_der_Omega,
-                               coef_hinge_H, coef_hinge_W, coef_pos_D_h,
-                               coef_pos_D_w, self$cell_types, self$N, self$M,
+                               coef_hinge_H, coef_hinge_W, 
+                               self$cell_types, self$N, self$M,
                                iterations, step_errors_statistics, 0,
                                step_points_statistics_X, step_points_statistics_Omega,
                                self$mean_radius_X, self$mean_radius_Omega,
@@ -970,18 +968,16 @@ SinkhornNNLSLinseed <- R6Class(
       
       self$X <- res_[[1]]
       self$Omega <- res_[[2]]
-      self$D_w <- res_[[3]]
-      self$D_h <- res_[[4]]
       self$errors_statistics <- rbind(self$errors_statistics,
-                                      res_[[5]])
+                                      res_[[3]])
       self$points_statistics_X <- rbind(self$points_statistics_X,
-                                        res_[[6]])
+                                        res_[[4]])
       self$points_statistics_Omega <- rbind(self$points_statistics_Omega,
-                                            res_[[7]])
+                                            res_[[5]])
       
       colnames(self$errors_statistics) <- c("deconv_error","lamdba_error","beta_error",
-                                            "D_h_error","D_w_error","total_error","orig_deconv_error",
-                                            "neg_props_count","neg_basis_count","sum_d_w")
+                                            "total_error","orig_deconv_error",
+                                            "neg_props_count","neg_basis_count")
       self$H_ <- self$X %*% self$R
       self$full_proportions <- diag(self$D_h[,1]) %*% self$H_
       self$orig_full_proportions <- self$full_proportions
