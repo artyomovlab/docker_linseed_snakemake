@@ -65,8 +65,6 @@ for (idx in 1:nrow(blocks_pipeline)){
                              coef_der_Omega = as.numeric(x["coef_der_Omega"]),
                              coef_hinge_H = as.numeric(x["coef_hinge_H"]),
                              coef_hinge_W = as.numeric(x["coef_hinge_W"]),
-                             coef_pos_D_h = as.numeric(x["coef_pos_D_h"]),
-                             coef_pos_D_w = as.numeric(x["coef_pos_D_w"]),
                              iterations = as.numeric(x["iterations"]),
                              limit_X = x_limit,
                              limit_Omega = omega_limit,
