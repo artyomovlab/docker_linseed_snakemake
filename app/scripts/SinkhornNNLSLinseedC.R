@@ -27,8 +27,6 @@ SinkhornNNLSLinseed <- R6Class(
     coef_der_Omega = NULL,
     coef_hinge_H = NULL,
     coef_hinge_W = NULL,
-    coef_pos_D_w = NULL,
-    coef_pos_D_h = NULL,
     global_iterations = NULL,
     new_points = NULL,
     new_samples_points = NULL,
@@ -220,8 +218,6 @@ SinkhornNNLSLinseed <- R6Class(
                           metric="mad",
                           coef_der_X = 0.001,
                           coef_der_Omega = 0.001,
-                          coef_pos_D_w = 0.01,
-                          coef_pos_D_h = 0.01,
                           coef_hinge_H = 100,
                           coef_hinge_W = 10,
                           global_iterations = 10000,
@@ -246,8 +242,6 @@ SinkhornNNLSLinseed <- R6Class(
       self$coef_der_Omega <- coef_der_Omega
       self$coef_hinge_H <- coef_hinge_H
       self$coef_hinge_W <- coef_hinge_W
-      self$coef_pos_D_w <- coef_pos_D_w
-      self$coef_pos_D_h <- coef_pos_D_h
       
       self$global_iterations <- global_iterations
       
@@ -791,8 +785,6 @@ SinkhornNNLSLinseed <- R6Class(
       coef_der_Omega = self$coef_der_Omega,
       coef_hinge_H = self$coef_hinge_H,
       coef_hinge_W = self$coef_hinge_W,
-      coef_pos_D_h = self$coef_pos_D_h,
-      coef_pos_D_w = self$coef_pos_D_w,
       iterations = self$global_iterations,
       startWithInit = F,
       limit_X = 0,
@@ -809,10 +801,11 @@ SinkhornNNLSLinseed <- R6Class(
         self$points_statistics_X <- NULL
         self$points_statistics_Omega <- NULL
         
-        self$X <- self$init_X
-        self$D_w <- self$init_D_w
-        self$Omega <- self$init_Omega
         
+        self$X <- sqrt(diag(self$init_D_h[,1]))  %*% self$init_X
+        self$Omega <- self$init_Omega %*% sqrt(diag(self$init_D_w[,1]))
+        
+        self$D_w <- self$init_D_w
         self$D_h <- self$init_D_h
         
         self$H_ <- self$X %*% self$R
@@ -822,6 +815,7 @@ SinkhornNNLSLinseed <- R6Class(
         self$W_ <- t(self$S) %*% self$Omega 
         self$full_basis <- self$W_ %*% diag(self$D_w[,1])
         self$init_count_neg_basis <- sum(self$full_basis < -1e-10)
+
       }
 
       if (limit_X>0) {
@@ -834,7 +828,7 @@ SinkhornNNLSLinseed <- R6Class(
         R_limit_Omega <- norm(self$new_samples_points[names(self$zero_distance_samples[limit_num_Omega]),-1],"2")
       }
       
-      step_errors_statistics <- matrix(0,nrow=iterations,ncol=9)
+      step_errors_statistics <- matrix(0,nrow=iterations,ncol=7)
       step_points_statistics_X <- matrix(0,nrow=iterations,ncol=self$cell_types^2)
       step_points_statistics_Omega <- matrix(0,nrow=iterations,ncol=self$cell_types^2)
       
@@ -868,7 +862,7 @@ SinkhornNNLSLinseed <- R6Class(
                                iterations, step_errors_statistics, 0,
                                step_points_statistics_X, step_points_statistics_Omega,
                                self$mean_radius_X, self$mean_radius_Omega,
-                               R_limit_X, R_limit_Omega,cosine_thresh)
+                               R_limit_X, R_limit_Omega, cosine_thresh)
       
       self$X <- res_[[1]]
       self$Omega <- res_[[2]]
@@ -882,7 +876,13 @@ SinkhornNNLSLinseed <- R6Class(
       colnames(self$errors_statistics) <- c("deconv_error","lamdba_error","beta_error",
                                             "total_error","orig_deconv_error",
                                             "neg_props_count","neg_basis_count")
-      self$H_ <- self$X %*% self$R
+      self$D_w <- ginv(self$Omega) %*% self$B
+      new_Omega <- self$Omega %*% diag(1/self$D_w[,1])
+  
+      self$D_h <- ginv(t(self$X)) %*% self$A
+      new_X <- self$X %*% diag(1/self$D_h[,1])
+
+      self$H_ <- new_X %*% self$R
       self$full_proportions <- diag(self$D_h[,1]) %*% self$H_
       self$orig_full_proportions <- self$full_proportions
       self$count_neg_props <- sum(self$full_proportions < -1e-10)
@@ -892,7 +892,7 @@ SinkhornNNLSLinseed <- R6Class(
       self$full_proportions[is.nan(self$full_proportions)] <- 0
       
       
-      self$W_ <- t(self$S) %*% self$Omega
+      self$W_ <- t(self$S) %*% new_Omega
       self$full_basis <- self$W_ %*% diag(self$D_w[,1])
       self$count_neg_basis <- sum(self$full_basis < -1e-10)
       
@@ -905,8 +905,7 @@ SinkhornNNLSLinseed <- R6Class(
   
   ## Plots
     
-    plotErrors = function(variables = c("deconv_error","lamdba_error","beta_error",
-    "D_h_error","D_w_error","total_error")) {
+    plotErrors = function(variables = c("deconv_error","lamdba_error","beta_error","total_error")) {
       
       toPlot <- data.frame(self$errors_statistics[,variables])
       toPlot$iteration <- 0:(nrow(self$errors_statistics)-1)
