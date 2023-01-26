@@ -12,15 +12,15 @@ loadRData <- function(fileName){
   get(ls()[ls() != "fileName"])
 }
 
-plotErrors <- function(metadata,variables = c("deconv_error","lamdba_error","beta_error",
-    "D_h_error","D_w_error","total_error")) {
-      toPlot <- data.frame(metadata$errors_statistics[,variables])
-      toPlot$iteration <- 0:(nrow(metadata$errors_statistics)-1)
-      toPlot <- melt(toPlot,id.vars="iteration",measure.vars = variables)
-      plt <- ggplot(toPlot,aes(x=iteration,y=log10(value),color=variable)) +
-      geom_point(size=0.2) +
-      geom_line() + theme_minimal()
-      plt
+plotErrors <- function(metadata,variables = c("deconv_error","lamdba_error","beta_error","total_error")) {
+  variables <- variables[variables %in% colnames(metadata$errors_statistics)]
+  toPlot <- data.frame(metadata$errors_statistics[,variables])
+  toPlot$iteration <- 0:(nrow(metadata$errors_statistics)-1)
+  toPlot <- melt(toPlot,id.vars="iteration",measure.vars = variables)
+  plt <- ggplot(toPlot,aes(x=iteration,y=log10(value),color=variable)) +
+  geom_point(size=0.2) +
+  geom_line() + theme_minimal()
+  plt
 }
 
 plotNegBasisChange <- function(metadata_) {
