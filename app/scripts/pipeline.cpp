@@ -41,7 +41,7 @@ arma::mat jump_norm(arma::mat& X, const double r_const_X = 0) {
   arma::uvec ids = arma::regspace<arma::uvec>(1, X.n_cols-1);
   X_trunc = X.cols(ids);
   for (int k = 0; k < X.n_rows; k++) {
-    double row_norm = norm(X_trunc.row(k),2);
+    double row_norm = norm(X_trunc.row(k),2)+1e-10;
     for (int j = 1; j < X.n_cols; j++) {
       if (r_const_X>row_norm) {
         norm_.at(k,j) = r_const_X/row_norm;
@@ -57,7 +57,7 @@ arma::mat jump_norm(arma::mat& X, const double r_const_X = 0) {
 arma::mat correctByNorm(arma::mat& X) {
   arma::vec norm_(X.n_rows);
   for (int k = 0; k < X.n_rows; k++) {
-    norm_[k] = norm(X.row(k),2);
+    norm_[k] = norm(X.row(k),2)+1e-10;
   }
   mat B = diagmat(1/norm_) * X;
   B.elem( find_nonfinite(B) ).zeros();
