@@ -16,7 +16,7 @@ output:
 ```{r, echo=FALSE}
 library(data.table)
 library(dplyr)
-load(snakemake@input[[6]])
+load(snakemake@input[[5]])
 
 before_genes = nrow(metadata_$raw_dataset)
 before_samples = ncol(metadata_$raw_dataset)
@@ -96,11 +96,11 @@ knitr::kable(as.data.frame(fread(snakemake@input[[1]],sep="\t")))
 ```
 ## UMAP
 ### Original space
-<img src="`r base64enc::dataURI(file = snakemake@input[[9]], mime = 'image/png', encoding = 'base64')`"></img>
+<img src="`r base64enc::dataURI(file = snakemake@input[[8]], mime = 'image/png', encoding = 'base64')`"></img>
 <h3>Projected space (X)</h3>
-<img src="`r base64enc::dataURI(file = snakemake@input[[11]], mime = 'image/png', encoding = 'base64')`"></img>
+<img src="`r base64enc::dataURI(file = snakemake@input[[10]], mime = 'image/png', encoding = 'base64')`"></img>
 <h3>Projected space (Omega)</h3>
-<img src="`r base64enc::dataURI(file = snakemake@input[[12]], mime = 'image/png', encoding = 'base64')`"></img>
+<img src="`r base64enc::dataURI(file = snakemake@input[[11]], mime = 'image/png', encoding = 'base64')`"></img>
 
 ## Best initialization
 <h3>Trajectory plot</h3>
@@ -110,18 +110,16 @@ knitr::kable(as.data.frame(fread(snakemake@input[[1]],sep="\t")))
 <h3>Number of negative elements in basis</h3>
 <img src="`r base64enc::dataURI(file = snakemake@input[[3]], mime = 'image/png', encoding = 'base64')`"></img>
 <h3>Proportions distribution</h3>
-<img src="`r base64enc::dataURI(file = snakemake@input[[13]], mime = 'image/png', encoding = 'base64')`"></img>
+<img src="`r base64enc::dataURI(file = snakemake@input[[12]], mime = 'image/png', encoding = 'base64')`"></img>
 <h3>Basis distribution</h3>
-<img src="`r base64enc::dataURI(file = snakemake@input[[14]], mime = 'image/png', encoding = 'base64')`"></img>
-<h3>Sum-to-one constraint</h3>
-<img src="`r base64enc::dataURI(file = snakemake@input[[5]], mime = 'image/png', encoding = 'base64')`"></img>
+<img src="`r base64enc::dataURI(file = snakemake@input[[13]], mime = 'image/png', encoding = 'base64')`"></img>
 <h3>Proportions</h3>
-<img src="`r base64enc::dataURI(file = snakemake@input[[10]], mime = 'image/png', encoding = 'base64')`"></img>
+<img src="`r base64enc::dataURI(file = snakemake@input[[9]], mime = 'image/png', encoding = 'base64')`"></img>
 <h3>Markers</h3>
 ```{r, echo=FALSE}
   top_genes  <- 20
   cell_types <- metadata_$cell_types
-  basis_ <- data.frame(fread(snakemake@input[[8]])) %>%
+  basis_ <- data.frame(fread(snakemake@input[[7]])) %>%
     dplyr::rename(gene = "V1")
   basis_ <- basis_[-1,]
   genesList <- data.frame(genes=rep(" ",cell_types))
@@ -137,15 +135,15 @@ knitr::kable(as.data.frame(fread(snakemake@input[[1]],sep="\t")))
 ```
 
 <h3>Basis zero distance</h3>
-<img src="`r base64enc::dataURI(file = snakemake@input[[15]], mime = 'image/png', encoding = 'base64')`"></img>
+<img src="`r base64enc::dataURI(file = snakemake@input[[14]], mime = 'image/png', encoding = 'base64')`"></img>
 <h3>Proportions zero distance</h3>
-<img src="`r base64enc::dataURI(file = snakemake@input[[16]], mime = 'image/png', encoding = 'base64')`"></img>
+<img src="`r base64enc::dataURI(file = snakemake@input[[15]], mime = 'image/png', encoding = 'base64')`"></img>
 
 <h3>Cosine similarity (proportions)</h3>
-<img src="`r base64enc::dataURI(file = snakemake@input[[17]], mime = 'image/png', encoding = 'base64')`"></img>
+<img src="`r base64enc::dataURI(file = snakemake@input[[16]], mime = 'image/png', encoding = 'base64')`"></img>
 <h3>Cosine similarity (basis)</h3>
-<img src="`r base64enc::dataURI(file = snakemake@input[[18]], mime = 'image/png', encoding = 'base64')`"></img>
+<img src="`r base64enc::dataURI(file = snakemake@input[[17]], mime = 'image/png', encoding = 'base64')`"></img>
 
 
-<a href="`r base64enc::dataURI(file = snakemake@input[[7]], mime = 'text', encoding = 'base64')`">Download proportions</a><br>
-<a href="`r base64enc::dataURI(file = snakemake@input[[8]], mime = 'text', encoding = 'base64')`">Download basis</a><br>
+<a href="`r base64enc::dataURI(file = snakemake@input[[6]], mime = 'text', encoding = 'base64')`">Download proportions</a><br>
+<a href="`r base64enc::dataURI(file = snakemake@input[[7]], mime = 'text', encoding = 'base64')`">Download basis</a><br>

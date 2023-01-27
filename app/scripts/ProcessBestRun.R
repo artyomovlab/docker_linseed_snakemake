@@ -31,15 +31,15 @@ png(snakemake@output[[5]])
 plotNegProportionsChange(metadata_)
 dev.off()
 
-png(snakemake@output[[6]])
-plotSumToOneChange(metadata_)
-dev.off()
+#png(snakemake@output[[6]])
+#plotSumToOneChange(metadata_)
+#dev.off()
 
-png(snakemake@output[[7]])
+png(snakemake@output[[6]])
 plotPoints2D(metadata_,"init")
 dev.off()
 
-png(snakemake@output[[8]])
+png(snakemake@output[[7]])
 plotPoints2D(metadata_,"current")
 dev.off()
 
@@ -47,19 +47,19 @@ file.copy(snakemake@input[[idx]],
 snakemake@output[[2]])
 
 file.copy(file.path("results",snakemake@params[["run_id"]],"meta",paste0(df$analysis_name,".meta")),
-          snakemake@output[[9]])
+          snakemake@output[[8]])
 
 file.copy(file.path("results",snakemake@params[["run_id"]],"props",paste0(df$analysis_name,"_proportions.tsv")),
-          snakemake@output[[10]])
+          snakemake@output[[9]])
 
 file.copy(file.path("results",snakemake@params[["run_id"]],"basis_row",paste0(df$analysis_name,"_basis_fc.tsv")),
-          snakemake@output[[11]])
+          snakemake@output[[10]])
 
 file.copy(file.path("results",snakemake@params[["run_id"]],"basis_col",paste0(df$analysis_name,"_basis_fc_clmn.tsv")),
-          snakemake@output[[12]])
+          snakemake@output[[11]])
 
 file.copy(file.path("results",snakemake@params[["run_id"]],"points",paste0(df$analysis_name,"_points.rds")),
-snakemake@output[[14]])
+snakemake@output[[13]])
 
 all_basis  <- data.frame(matrix(0,ncol=0,nrow=nrow(metadata_$filtered_dataset)))
 for (f in snakemake@input[['basis_col']]){
@@ -97,35 +97,35 @@ png(snakemake@output[['UMAP_projOmega']])
 plotCosineUMAP(t(all_Omega),df$analysis_name)
 dev.off()
 
-png(snakemake@output[[13]])
+png(snakemake@output[[12]])
 plotAbundance(metadata_)
 dev.off()
 
-png(snakemake@output[[15]])
+png(snakemake@output[[14]])
 plotDistribution(metadata_$orig_full_proportions)
 dev.off()
 
-png(snakemake@output[[16]])
+png(snakemake@output[[15]])
 plotDistribution(metadata_$orig_full_basis)
 dev.off()
 
 basis <- fread(file.path("results",snakemake@params[["run_id"]],"basis_col",paste0(df$analysis_name,"_basis_fc_clmn.tsv")))
 basis <- basis[-1,]
 
-png(snakemake@output[[17]])
+png(snakemake@output[[16]])
 plotBasisDistance(metadata_,basis)
 dev.off()
 
 proportions <- fread(file.path("results",snakemake@params[["run_id"]],"props",paste0(df$analysis_name,"_proportions.tsv")))
 
-png(snakemake@output[[18]])
+png(snakemake@output[[17]])
 plotProportionsDistance(metadata_,proportions)
 dev.off()
 
-png(snakemake@output[[19]])
+png(snakemake@output[[18]])
 plotCosineHeatmap(metadata_$final_X)
 dev.off()
 
-png(snakemake@output[[20]])
+png(snakemake@output[[19]])
 plotCosineHeatmap(metadata_$final_Omega)
 dev.off()

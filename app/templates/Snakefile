@@ -94,7 +94,6 @@ rule make_plots:
         "results/{run_id}/plots/{sample}/trajectory.png",
         "results/{run_id}/plots/{sample}/negative_proportions.png",
         "results/{run_id}/plots/{sample}/negative_basis.png",
-        "results/{run_id}/plots/{sample}/sum_to_one_const.png",
         "results/{run_id}/points/{sample}_points.rds"
     threads: config['count']['threads']
     resources:
@@ -133,7 +132,6 @@ rule select_best:
         "results/{run_id}/best/init_id.stamp",
         "results/{run_id}/best/negative_basis.png",
         "results/{run_id}/best/negative_proportions.png",
-        "results/{run_id}/best/sum_to_one_const.png",
         "results/{run_id}/best/init_points.png",
         "results/{run_id}/best/final_points.png",
         "results/{run_id}/best/metafile.meta",
@@ -163,7 +161,6 @@ rule prepare_report:
                 "results/{run_id}/best/trajectory.png",                
                 "results/{run_id}/best/negative_basis.png",
                 "results/{run_id}/best/negative_proportions.png",
-                "results/{run_id}/best/sum_to_one_const.png",
                 "results/{run_id}/best/metafile.meta",
                 "results/{run_id}/best/proportions.tsv",
                 "results/{run_id}/best/basis_column.tsv",
