@@ -691,7 +691,7 @@ SinkhornNNLSLinseed <- R6Class(
         
         
         #X
-        ids_X <- sample(1:self$N,self$cell_types)
+        ids_X <- sample(1:self$M,self$cell_types)
         Ae <- self$V_row[ids_X,]
         init_X <- Ae %*% t(self$R)
         metric_X <- sqrt(sum(apply(init_X[,-1],2,mean)^2))

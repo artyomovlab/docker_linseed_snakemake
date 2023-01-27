@@ -120,10 +120,10 @@ plotUMAP <- function(data_, best_run){
     xlab('UMAP1') + ylab('UMAP2')
 }
 
-plotCosineUMAP <- function(data_, best_run){
+plotCosineUMAP <- function(data_, best_run,n_neighbors=2){
   data_ <- cosine(as.matrix(data_))
   data_[is.nan(data_)] <- 0
-  toPlot <- as.data.frame(umap(data_,n_neighbors=2))
+  toPlot <- as.data.frame(umap(data_,n_neighbors=n_neighbors))
   rownames(toPlot) <- rownames(data_)
   toPlot$best <- grepl(paste0("^",best_run),rownames(toPlot))
   toPlot$best_id <- NULL
