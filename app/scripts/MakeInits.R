@@ -64,7 +64,7 @@ if (init_strategy == "SelectXVCAConvex") {
                  init_X=tmp_snk$init_X,
                  init_D_w= tmp_snk$init_D_w,
                  init_D_h = tmp_snk$init_D_h),
-            snakemake@output[[idx]])
+            snakemake@output[[found_inits]])
     }
   }
 }
