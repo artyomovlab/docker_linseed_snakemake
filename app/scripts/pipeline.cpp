@@ -251,7 +251,7 @@ field<mat> derivative_stage(const arma::mat& X,
     // derivative X
     arma::colvec Z1 = arma::conv_to<arma::colvec>::from(new_Omega.row(0));
     new_X.col(0) = Z1;
-    der_X = -2 * (new_Omega.t() * (V__ - new_Omega * new_X * sqrt(M/N)));
+    der_X = -2 * sqrt(M/N) *(new_Omega.t() * (V__ - new_Omega * new_X * sqrt(M/N)));
     der_X += coef_hinge_H * hinge_der_proportions_C__(new_X * R, R);
     der_X = correctByNorm(der_X) * mean_radius_X;
     
@@ -276,7 +276,7 @@ field<mat> derivative_stage(const arma::mat& X,
     // derivative Omega
     arma::rowvec Z2 = arma::conv_to<arma::rowvec>::from(new_X.col(0));
     new_Omega.row(0) = Z2;
-    der_Omega = -2 * (V__ - new_Omega * new_X * sqrt(M/N)) * new_X.t();
+    der_Omega = -2 * sqrt(M/N) * (V__ - new_Omega * new_X * sqrt(M/N)) * new_X.t();
     der_Omega += coef_hinge_W * hinge_der_basis_C__(S.t() * new_Omega, S);
     der_Omega = correctByNorm(der_Omega) * mean_radius_Omega;
     

@@ -876,11 +876,11 @@ SinkhornNNLSLinseed <- R6Class(
       colnames(self$errors_statistics) <- c("deconv_error","lamdba_error","beta_error",
                                             "total_error","orig_deconv_error",
                                             "neg_props_count","neg_basis_count")
-      self$D_w <- ginv(self$Omega) %*% self$B
-      new_Omega <- self$Omega %*% diag(1/(self$D_w[,1]+1e-20))
+      self$D_w <- (ginv(self$Omega) %*% self$B)^2
+      new_Omega <- self$Omega %*% ginv(sqrt(diag(self$D_w[,1])))
       
       self$D_h <- (ginv(t(self$X)) %*% self$A)^2
-      new_X <- self$X %*% diag(1/(self$D_h[,1]+1e-20))
+      new_X <- self$X %*% ginv(sqrt(diag(self$D_h[,1])))
 
       self$H_ <- new_X %*% self$R
       self$full_proportions <- diag(self$D_h[,1]) %*% self$H_
