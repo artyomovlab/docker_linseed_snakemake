@@ -613,7 +613,21 @@ SinkhornNNLSLinseed <- R6Class(
       ## Omega
       V__ <- self$S %*% self$V_row %*% t(self$R)
       self$init_Omega <- V__ %*% ginv(diag(self$init_D_w[,1]) %*% self$init_X)
+    },
 
+    selectInitXMarkerMeans <- function(self, markers_list) {
+      marker_means <- lapply(markers_list, function(x) colMeans(self$new_points[x, ]))
+
+      ## X
+      self$init_X <- matrix(unlist(marker_means), ncol = self$cell_types, byrow = T)
+
+      ## D
+      self$init_D_h <- ginv(t(self$init_X)) %*% self$A
+      self$init_D_w <- self$init_D_h * (self$M/self$N)
+
+      ## Omega
+      V__ <- self$S %*% self$V_row %*% t(self$R)
+      self$init_Omega <- V__ %*% ginv(diag(self$init_D_w[,1]) %*% self$init_X)
     },
 
     selectInitXConvex = function(r_tilda=0.95){
