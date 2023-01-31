@@ -412,16 +412,18 @@ field<mat> derivative_stage2(const arma::mat& X,
                            coef_der_Omega, coef_hinge_H,
                            coef_hinge_W, coef_pos_D_h,
                            coef_pos_D_w);
-    errors_statistics.row(itr_) = { err_["error_"],
-                                    err_["lambda_error"],
-                                        err_["beta_error"],
-                                            err_["D_h_error"],
-                                                err_["D_w_error"],
-                                                    err_["new_error"],
-                                                        err_["orig_deconv_error"],
-                                                            neg_props,
-                                                            neg_basis,
-                                                            sum_};
+    errors_statistics.row(itr_) = arma::rowvec{
+        err_["error_"],
+        err_["lambda_error"],
+        err_["beta_error"],
+        err_["D_h_error"],
+        err_["D_w_error"],
+        err_["new_error"],
+        err_["orig_deconv_error"],
+        neg_props,
+        neg_basis,
+        sum_
+    };
     points_statistics_X.row(itr_) = new_X.as_row();
     points_statistics_Omega.row(itr_) = new_Omega.as_row();
     
