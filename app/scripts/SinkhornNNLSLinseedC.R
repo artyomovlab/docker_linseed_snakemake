@@ -615,7 +615,7 @@ SinkhornNNLSLinseed <- R6Class(
       self$init_Omega <- V__ %*% ginv(diag(self$init_D_w[,1]) %*% self$init_X)
     },
 
-    selectInitXMarkerMeans <- function(self, markers_list) {
+    selectInitXMarkerMeans = function(self, markers_list) {
       marker_means <- lapply(markers_list, function(x) colMeans(self$new_points[x, ]))
 
       ## X

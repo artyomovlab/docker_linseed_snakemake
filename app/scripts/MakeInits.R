@@ -140,6 +140,17 @@ if (init_strategy == "SelectX") {
     saveRDS(prepareInit(tmp_snk, tmp_1$idsTableX[idx, -ctn], tmp_1$idsTableOmega[idx, -ctn]),
             snakemake@output[[idx]])
   }
+} else if (init_strategy == "MarkersMean") {
+  markers_list <- readRDS(snakemake@config[["markers_path"]])
+  # TODO: it's actually all the same initialization.
+  for (idx in 1:snakemake@config[["num_inits"]]) {
+    tmp_snk$selectInitXMarkerMeans(markers_list)
+    saveRDS(list(init_Omega = tmp_snk$init_Omega,
+                 init_X = tmp_snk$init_X,
+                 init_D_w = tmp_snk$init_D_w,
+                 init_D_h = tmp_snk$init_D_h),
+            snakemake@output[[idx]])
+  }
 } else {
   stop("Selected initialization is not allowed")
 }
