@@ -68,13 +68,25 @@ if (!is.null(snakemake@config[["top_median"]])){
     dev.off()
     
     tmp_snk$filterByMADExpMedian(min_mad,max_mad,min_median,max_median)
+    print(1)
+    print(paste(tmp_snk$M," : ",tmp_snk$N))
+    print(paste(sum(tmp_snk$A^2)," : ",sum(tmp_snk$B^2)))
 }
 tmp_snk$scaleDataset(snakemake@config[["scale_iterations"]])
+print(2)
+print(paste(tmp_snk$M," : ",tmp_snk$N))
+print(paste(sum(tmp_snk$A^2)," : ",sum(tmp_snk$B^2)))
 png(snakemake@output[["svd_before"]])
 plotSVD(tmp_snk,snakemake@output[["svd_before_plot"]])
 dev.off()
 tmp_snk$getSvdProjectionsNew()
+print(3)
+print(paste(tmp_snk$M," : ",tmp_snk$N))
+print(paste(sum(tmp_snk$A^2)," : ",sum(tmp_snk$B^2)))
 tmp_snk$calculateDistances()
+print(4)
+print(paste(tmp_snk$M," : ",tmp_snk$N))
+print(paste(sum(tmp_snk$A^2)," : ",sum(tmp_snk$B^2)))
 
 #png(snakemake@output[["distance_before"]])
 #plotDistances(tmp_snk)
@@ -96,6 +108,9 @@ if (!is.null(snakemake@config[["filter_by_plane"]])){
 tmp_snk$removeOutliers(cutoff_samples = cutoff_samples,
                          cutoff_genes = cutoff_genes,
                          filter_by_plane = filter_by_plane)
+print(5)
+print(paste(tmp_snk$M," : ",tmp_snk$N))
+print(paste(sum(tmp_snk$A^2)," : ",sum(tmp_snk$B^2)))
 #png(snakemake@output[["distance_after"]])
 #plotDistances(tmp_snk,0,0)
 #dev.off()
