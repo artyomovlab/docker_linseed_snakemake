@@ -901,6 +901,7 @@ SinkhornNNLSLinseed <- R6Class(
       self$full_basis <- self$full_basis / (rowSums(self$full_basis)+1e-10)
       self$full_basis[is.nan(self$full_basis)] <- 0
       
+      
     },
   
   ## Plots
