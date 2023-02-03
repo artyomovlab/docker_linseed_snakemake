@@ -459,11 +459,11 @@ SinkhornNNLSLinseed <- R6Class(
         while(cutoff_samples && (prev_length_samples > self$N) || cutoff_genes && (prev_length_genes > self$M)) {
           if (cutoff_samples) {
             prev_length_samples <- self$N
-              new_anno <- self$thresholdCutoff(method = "n_sigma", samples = T, recalculate_distances = !cutoff_genes)
+              self$thresholdCutoff(method = "n_sigma", samples = T, recalculate_distances = !cutoff_genes)
             }
             if (cutoff_genes) {
               prev_length_genes <- self$M
-              new_anno <- self$thresholdCutoff(method = "n_sigma", samples = F)
+              self$thresholdCutoff(method = "n_sigma", samples = F)
             }
           }
       }
@@ -880,7 +880,7 @@ SinkhornNNLSLinseed <- R6Class(
       new_Omega <- self$Omega %*% ginv(sqrt(diag(self$D_w[,1])))
       
       self$D_h <- (ginv(t(self$X)) %*% self$A)^2
-      new_X <- self$X %*% ginv(sqrt(diag(self$D_h[,1])))
+      new_X <- ginv(sqrt(diag(self$D_h[,1]))) %*% self$X
 
       self$H_ <- new_X %*% self$R
       self$full_proportions <- diag(self$D_h[,1]) %*% self$H_
