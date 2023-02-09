@@ -156,8 +156,9 @@ if (init_strategy == "SelectRandom") {
   tmp_1 <- tmp_snk$initWithSubset(10000,snakemake@config[["num_inits"]])
   ctn <- ncol(tmp_1$idsTableOmega)
   for (idx in 1:snakemake@config[["num_inits"]]) {
-    saveRDS(prepareInit(tmp_snk,tmp_1$idsTableX[idx,-ctn],tmp_1$idsTableOmega[idx,-ctn]),
-            snakemake@output[[idx]])
+    init_ <- prepareInit(tmp_snk,tmp_1$idsTableX[idx,-ctn],tmp_1$idsTableOmega[idx,-ctn]) 
+    tmp_snk$init_X <- init_$init_X
+    saveRDS(init_, snakemake@output[[idx]])
   }
 }
 
