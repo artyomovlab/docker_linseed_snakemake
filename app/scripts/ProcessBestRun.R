@@ -86,15 +86,15 @@ for (f in snakemake@input[['points']]) {
 }
 
 png(snakemake@output[['UMAP']])
-plotCosineUMAP(all_basis,df$analysis_name)
+plotCosineUMAP(all_basis,df$analysis_name,metadata_$cell_types)
 dev.off()
 
 png(snakemake@output[['UMAP_projX']])
-plotCosineUMAP(t(all_X),df$analysis_name)
+plotCosineUMAP(t(all_X),df$analysis_name,metadata_$cell_types)
 dev.off()
 
 png(snakemake@output[['UMAP_projOmega']])
-plotCosineUMAP(t(all_Omega),df$analysis_name)
+plotCosineUMAP(t(all_Omega),df$analysis_name,metadata_$cell_types)
 dev.off()
 
 png(snakemake@output[[12]])
