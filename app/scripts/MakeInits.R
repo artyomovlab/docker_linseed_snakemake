@@ -5,11 +5,11 @@ prepareInit <- function(obj_, ids_X, ids_Omega) {
     V__ <- obj_$S %*% obj_$V_row %*% t(obj_$R)
     
     ## Omega
-    Ae <- obj_$V_column[, ids_X]
+    Ae <- obj_$V_column[, ids_Omega]
     init_Omega <- obj_$S %*% Ae
     
     ## X
-    Ae <- obj_$V_row[ids_Omega, ]
+    Ae <- obj_$V_row[ids_X, ]
     init_X <- Ae %*% t(obj_$R)
     
     ## calculate D_w and D_h
