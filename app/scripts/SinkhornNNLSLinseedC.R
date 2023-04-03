@@ -40,6 +40,7 @@ SinkhornNNLSLinseed <- R6Class(
     full_basis = NULL,
     
     preprocessing_cell_types = NULL,
+    preprocessing_organism = NULL,
     
     plane_distance_genes = NULL,
     plane_distance_samples = NULL,
