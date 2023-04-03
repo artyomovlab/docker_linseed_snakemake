@@ -161,7 +161,13 @@ SinkhornNNLSLinseed <- R6Class(
         "NaN containing" = function(dataset) complete.cases(dataset),
         ## filter out non-coding genes
         "non-coding" = function(dataset) {
-            gene_names <- readRDS("/app/scripts/coding_genes.rds")
+            if (self$preprocessing_organism == "Mouse") {
+                gene_names <- readRDS("/app/scripts/mice_coding_genes_v2.rds")
+            }
+            else {
+                gene_names <- readRDS("/app/scripts/coding_genes_v2.rds")
+            }
+
             intersect(rownames(dataset), gene_names)
           },
         ## filter out RPL/RPS genes
@@ -216,7 +222,8 @@ SinkhornNNLSLinseed <- R6Class(
                           geneSymbol = "Gene symbol",
                           linearize = F,
                           preprocessing = F,
-                          preprocessing_cell_types=20
+                          preprocessing_cell_types=20,
+                          preprocessing_organism="Human"
                           ) {
       self$filtered_samples <- filtered_samples
       self$dataset <- dataset
@@ -225,6 +232,7 @@ SinkhornNNLSLinseed <- R6Class(
       self$topGenes <- topGenes
       self$cell_types <- cell_types
       self$preprocessing_cell_types <- preprocessing_cell_types
+      self$preprocessing_organism <- preprocessing_organism
       
       self$data <- data
       
