@@ -41,6 +41,7 @@ SinkhornNNLSLinseed <- R6Class(
     
     preprocessing_cell_types = NULL,
     preprocessing_organism = NULL,
+    preprocessing_coding_genes = NULL,
     
     plane_distance_genes = NULL,
     plane_distance_samples = NULL,
@@ -162,11 +163,15 @@ SinkhornNNLSLinseed <- R6Class(
         "NaN containing" = function(dataset) complete.cases(dataset),
         ## filter out non-coding genes
         "non-coding" = function(dataset) {
-            if (self$preprocessing_organism == "Mouse") {
-                gene_names <- readRDS("/app/scripts/mice_coding_genes_v2.rds")
-            }
+            if (!is.null(self$preprocessing_coding_genes)) {
+                if (self$preprocessing_organism == "Mouse") {
+                    gene_names <- readRDS("/app/scripts/mice_coding_genes_v2.rds")
+                }
+                else {
+                    gene_names <- readRDS("/app/scripts/coding_genes_v2.rds")
+                }
             else {
-                gene_names <- readRDS("/app/scripts/coding_genes_v2.rds")
+                gene_names <- self$preprocessing_coding_genes
             }
 
             intersect(rownames(dataset), gene_names)
@@ -202,7 +207,7 @@ SinkhornNNLSLinseed <- R6Class(
       print(paste("Genes after preprocessing:", count_after, "genes left"))
       dataset
     },
-    
+
     initialize = function(dataset,
                           path,
                           analysis_name,
@@ -224,7 +229,8 @@ SinkhornNNLSLinseed <- R6Class(
                           linearize = F,
                           preprocessing = F,
                           preprocessing_cell_types=20,
-                          preprocessing_organism="Human"
+                          preprocessing_organism = "Human",
+                          preprocessing_coding_genes = NULL
                           ) {
       self$filtered_samples <- filtered_samples
       self$dataset <- dataset
@@ -234,6 +240,7 @@ SinkhornNNLSLinseed <- R6Class(
       self$cell_types <- cell_types
       self$preprocessing_cell_types <- preprocessing_cell_types
       self$preprocessing_organism <- preprocessing_organism
+      self$preprocessing_coding_genes <- preprocessing_coding_genes
       
       self$data <- data
       
