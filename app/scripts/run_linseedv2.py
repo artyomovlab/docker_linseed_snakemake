@@ -65,6 +65,7 @@ parser.add_option("--docker_image", default = "dockerreg01.accounts.ad.wustl.edu
 parser.add_option("--docker_tag", default = "cpp")
 parser.add_option("-e","--email", default = "aladyeva.e@wustl.edu")
 parser.add_option("--restarts", type=int, default = 1)
+parser.add_option("--markers_path")
 
 
 (options, args) = parser.parse_args()
@@ -133,6 +134,7 @@ with open(os.path.join(options.reports_path,"{0}.html".format(DT_STAMP)),"w+") a
         config_dict['preprocessing_cell_types']=options.preprocessing_cell_types
         config_dict['dt']=DT_STAMP
         config_dict['dataset']=options.dataset
+        config_dict['markers_path'] = options.markers_path
         config_dict['analysis_name']="{0}_ct{1}".format(options.analysis_name,ct)
         config_dict['blocks_pipeline']="config/blocks.csv"
         config_dict['count']={'time':6000,'mem_ram':32,'threads':8,'email':options.email,

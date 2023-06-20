@@ -607,13 +607,25 @@ SinkhornNNLSLinseed <- R6Class(
       Ae <- restored[indice, ]
       ## X
       self$init_X <- Ae %*% t(self$R)
-      ## D
-      self$init_D_h <- ginv(t(self$init_X)) %*% self$A
-      self$init_D_w <- self$init_D_h * (self$M/self$N)
-      ## Omega
-      V__ <- self$S %*% self$V_row %*% t(self$R)
-      self$init_Omega <- V__ %*% ginv(diag(self$init_D_w[,1]) %*% self$init_X)
+      self$setInitParamsByX()
+    },
 
+    selectInitXFixed = function(gene_list) {
+      ## X
+      self$init_X <- self$new_points[gene_list, ]
+      self$setInitParamsByX()
+    },
+
+    selectInitXMarkerMeans = function(markers_list) {
+      marker_means <- lapply(markers_list, function(x) {
+        sel <- x[x %in% rownames(self$new_points)]
+        if (sum(sel) == 0) stop("One or more cell types has zero markers present")
+        colMeans(self$new_points[sel, ])
+      })
+      ## X
+      self$init_X <- matrix(unlist(marker_means), ncol = self$cell_types, byrow = T)
+
+      self$setInitParamsByX()
     },
 
     selectInitXConvex = function(r_tilda=0.95){
@@ -624,8 +636,14 @@ SinkhornNNLSLinseed <- R6Class(
       self$init_X <- cbind(1/sqrt(self$N),
                               rbind(self$init_X,
                                     -1/(self$cell_types-1) * apply(self$init_X,1,sum)))
+      self$setInitParamsByX()
+    },
+
+    setInitParamsByX = function() {
+      ## D
       self$init_D_h <- ginv(t(self$init_X)) %*% self$A
       self$init_D_w <- self$init_D_h * (self$M/self$N)
+
       ## Omega
       V__ <- self$S %*% self$V_row %*% t(self$R)
       self$init_Omega <- V__ %*% ginv(diag(self$init_D_w[,1]) %*% self$init_X)
